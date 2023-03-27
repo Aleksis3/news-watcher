@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { ref } from "vue";
+import Modal from "@/components/Modal.vue";
 const props = defineProps({
   title: String,
   desc: String,
@@ -6,18 +8,20 @@ const props = defineProps({
   category: String,
   url: String,
 });
+const showModal = ref(false);
 </script>
 
 <template>
   <Fragment>
+    <Teleport to="body">
+      <modal :show="showModal" @close="showModal = false">
+        <template #body>
+          <iframe class="xd" :src="props.url"></iframe>
+        </template>
+      </modal>
+    </Teleport>
     <div class="container">
-      <!-- <iframe
-        :src="props.url"
-        width="680"
-        height="480"
-        allowfullscreen
-      ></iframe> -->
-      <div class="info">
+      <div class="info" @click="showModal = true">
         <h2 class="header">{{ props.title }}</h2>
         <p class="category">{{ props.category }}</p>
         <p class="desc">{{ props.desc }}</p>
@@ -30,11 +34,15 @@ const props = defineProps({
 <style scoped>
 .container {
   display: flex;
-  height: 18rem;
-  gap: 15rem;
-
+  height: fit-content;
+  padding: 3rem 0;
+  width: 90rem;
+  max-width: 95vw;
   border-bottom: 1px black solid;
-  padding: 1rem 0;
+}
+
+.header {
+  font-size: 2rem;
 }
 
 .info {
@@ -42,13 +50,16 @@ const props = defineProps({
   cursor: pointer;
   flex-direction: column;
   gap: 1rem;
-  width: 50%;
 }
 
 .desc {
   color: black;
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   letter-spacing: 0.2px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .category {
@@ -60,12 +71,25 @@ const props = defineProps({
   text-transform: uppercase;
   color: #111;
   font-weight: bold;
+  font-size: 1.3rem;
 }
 
 img {
-  object-fit: cover;
-  height: 100%;
-  width: auto;
+  object-fit: fill;
+  height: 15rem;
+  width: 20rem;
   padding: 1rem;
+  margin-left: 5rem;
+}
+
+.xd {
+  width: 100%;
+  height: 100%;
+}
+
+@media only screen and (max-width: 40rem) {
+  img {
+    display: none;
+  }
 }
 </style>

@@ -23,11 +23,12 @@ nav {
   font-size: 2rem;
   background-color: #7048e8;
   height: calc(100vh - 6.5rem);
-  max-width: 28rem;
+  min-width: 25rem;
   position: sticky;
   left: 0;
   top: 6.5rem;
 }
+
 .list {
   display: flex;
 
@@ -47,5 +48,12 @@ li {
   border-top: none;
   width: 100%;
   cursor: pointer;
+}
+
+@media only screen and (max-width: 50rem) {
+  nav {
+    display: none;
+    position: relative;
+  }
 }
 </style>

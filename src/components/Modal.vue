@@ -5,28 +5,15 @@ const props = defineProps({
 </script>
 
 <template>
-  <Transition name="modal">
-    <div v-if="show" class="modal-mask">
-      <div class="modal-container">
-        <div class="modal-header">
-          <slot name="header">default header</slot>
-        </div>
-
-        <div class="modal-body">
-          <slot name="body">default body</slot>
-        </div>
-
-        <div class="modal-footer">
-          <slot name="footer">
-            default footer
-            <button class="modal-default-button" @click="$emit('close')">
-              OK
-            </button>
-          </slot>
-        </div>
+  <div v-if="show" class="modal-mask">
+    <div class="modal-container">
+      <!-- <button class="modal-default-button" @click="$emit('close')">OK</button> -->
+      <div class="modal-body">
+        <slot name="body">default body</slot>
+        <button class="close-btn" @click="$emit(`close`)">X</button>
       </div>
     </div>
-  </Transition>
+  </div>
 </template>
 
 <style>
@@ -37,15 +24,16 @@ const props = defineProps({
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.9);
   display: flex;
   transition: opacity 0.3s ease;
 }
 
 .modal-container {
-  width: 300px;
+  /* width: 130rem; */
+  width: 80vw;
+  height: 95vh;
   margin: auto;
-  padding: 20px 30px;
   background-color: #fff;
   border-radius: 2px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
@@ -58,12 +46,26 @@ const props = defineProps({
 }
 
 .modal-body {
-  margin: 20px 0;
+  max-width: 90vw;
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background-color: red;
 }
 
-.modal-default-button {
-  float: right;
+.close-btn {
+  padding: 2rem 3rem;
+  position: absolute;
 }
+
+.next {
+  right: 3rem;
+}
+
+/* .modal-default-button {
+  float: right;
+} */
 
 /*
  * The following styles are auto-applied to elements with
