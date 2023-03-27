@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "vue": "^3.2.47",
+    "vue-friendly-iframe": "^0.20.0",
+    "vue-iframes": "^0.0.20",
     "vue-router": "^4.1.6"
   },
   "devDependencies": {

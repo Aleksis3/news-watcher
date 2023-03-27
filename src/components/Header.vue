@@ -9,6 +9,9 @@
 <style scoped>
 header {
   display: flex;
+  position: sticky;
+  top: 0;
+  z-index: 100;
   font-weight: bold;
   text-transform: uppercase;
   background-color: var(--purple-1);

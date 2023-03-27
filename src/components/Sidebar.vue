@@ -24,9 +24,13 @@ nav {
   background-color: #7048e8;
   height: calc(100vh - 6.5rem);
   max-width: 28rem;
+  position: sticky;
+  left: 0;
+  top: 6.5rem;
 }
 .list {
   display: flex;
+
   color: #fff;
   align-items: center;
   flex-direction: column;
