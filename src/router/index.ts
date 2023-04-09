@@ -1,3 +1,4 @@
+import Header from "@/components/Header.vue";
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 
@@ -9,6 +10,11 @@ const router = createRouter({
       name: "home",
       component: HomeView,
     },
+    // {
+    //   path: "/a",
+    //   name: "xd",
+    //   component: Header,
+    // },
   ],
 });
 

@@ -1,18 +1,29 @@
 <script setup lang="ts">
-import json from "../mock2.json";
+import Paginator from "primevue/paginator";
+
 import Card from "./NewsEl/Wrappers/Card.vue";
 import NewsEl from "./NewsEl/NewsEl.vue";
-const names = [
-  "General",
-  "Business",
-  "Entertainment",
-  "Health",
-  "Science",
-  "Sports",
-  "Technology",
-];
-console.log(json);
-const a = json.data;
+
+import { ref, watchEffect } from "vue";
+import router from "@/router";
+
+const displayCard = ref(true);
+const offset = ref(1);
+const data = ref({ data: [] });
+
+watchEffect(async () => {
+  const response = await fetch("/message?limit=20&offset=10");
+  const parsedResponse = await response.json();
+  data.value = parsedResponse.news;
+  console.log(data.value);
+});
+console.log(data.value);
+
+const onPaginate = (e: any) => {
+  offset.value = e.rows * (e.page + 1);
+  router.replace({ path: `/${e.page + 1}` });
+  console.log(offset.value);
+};
 </script>
 
 <template>
@@ -20,12 +31,21 @@ const a = json.data;
     <div class="header-container">
       <h1 class="header">News</h1>
       <p>Display:</p>
-      <p>Card</p>
-      <p>List</p>
+      <p @click="displayCard = true">Card</p>
+      <p @click="displayCard = false">List</p>
     </div>
     <div class="news">
-      <div v-for="(item, index) in a">
+      <div v-for="(item, index) in data.data">
         <Card
+          v-if="displayCard"
+          :title="item.title"
+          :desc="item.description"
+          :image="item.image || undefined"
+          :category="item.category"
+          :url="item.url"
+        />
+        <NewsEl
+          v-else
           :title="item.title"
           :desc="item.description"
           :image="item.image || undefined"
@@ -34,6 +54,15 @@ const a = json.data;
         />
       </div>
     </div>
+
+    <Paginator
+      v-model:first="offset"
+      @page="onPaginate"
+      :rows="15"
+      :totalRecords="120"
+      :rowsPerPageOptions="[15, 25, 35]"
+      class="paginator"
+    ></Paginator>
   </div>
 </template>
 
@@ -51,7 +80,19 @@ const a = json.data;
   align-items: center;
   justify-content: center;
   /* flex-direction: column; */
-  gap: 2rem;
+  gap: 3rem;
+}
+
+/* :deep(.p-paginator-page) {
+  font-size: 5rem;
+} */
+
+:deep(.p-paginator > * > *) {
+  font-size: 3rem;
+}
+
+.paginator {
+  margin-top: 5rem;
 }
 
 .header-container {

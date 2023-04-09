@@ -26,7 +26,9 @@ const showModal = ref(false);
         <p class="category">{{ props.category }}</p>
         <p class="desc">{{ props.desc }}</p>
       </div>
-      <img v-if="props.image" :src="props.image" alt="news image" />
+      <div class="img-container">
+        <img v-if="props.image" :src="props.image" alt="news image" />
+      </div>
     </div>
   </Fragment>
 </template>
@@ -42,11 +44,13 @@ const showModal = ref(false);
 }
 
 .header {
+  width: 80%;
   font-size: 2rem;
 }
 
 .info {
   display: flex;
+  padding: 1rem;
   cursor: pointer;
   flex-direction: column;
   gap: 1rem;
@@ -54,6 +58,7 @@ const showModal = ref(false);
 
 .desc {
   color: black;
+  width: 90%;
   font-size: 1.6rem;
   letter-spacing: 0.2px;
   display: -webkit-box;
@@ -74,12 +79,17 @@ const showModal = ref(false);
   font-size: 1.3rem;
 }
 
+.img-container {
+  display: flex;
+  margin-left: auto;
+  justify-content: flex-end;
+}
+
 img {
   object-fit: fill;
   height: 15rem;
   width: 20rem;
   padding: 1rem;
-  margin-left: 5rem;
 }
 
 .xd {

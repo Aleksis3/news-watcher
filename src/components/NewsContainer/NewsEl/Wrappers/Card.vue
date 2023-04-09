@@ -20,9 +20,9 @@ const showModal = ref(false);
         </template>
       </modal>
     </Teleport>
-    <div class="container">
+    <div class="container" @click="showModal = true">
       <img v-if="props.image" :src="props.image" alt="news image" />
-      <div class="info" @click="showModal = true">
+      <div class="info">
         <h2 class="header">{{ props.title }}</h2>
 
         <p class="category">{{ props.category }}</p>
@@ -36,10 +36,20 @@ const showModal = ref(false);
 <style scoped>
 .container {
   display: flex;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   flex-direction: column;
+  cursor: pointer;
   height: 50rem;
   width: 35rem;
   border: 1px black solid;
+}
+
+.container:hover {
+  transform: scale(1.05);
+  transition-duration: 0.2s;
+
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
+    rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
 }
 
 .header {
@@ -53,7 +63,6 @@ const showModal = ref(false);
 .info {
   display: flex;
   padding: 3rem;
-  cursor: pointer;
   flex-direction: column;
   gap: 1rem;
 }

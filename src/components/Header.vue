@@ -2,7 +2,7 @@
 
 <template>
   <header>
-    <p class="logo">news-watcher</p>
+    <router-link class="logo" to="/">news-watcher</router-link>
   </header>
 </template>
 
@@ -21,5 +21,9 @@ header {
   align-items: center;
   padding: 0 4rem;
   height: 6.5rem;
+}
+
+.logo {
+  cursor: pointer;
 }
 </style>
