@@ -1,29 +1,61 @@
 <script setup lang="ts">
 import Paginator from "primevue/paginator";
-
 import Card from "./NewsEl/Wrappers/Card.vue";
 import NewsEl from "./NewsEl/NewsEl.vue";
-
-import { ref, watchEffect } from "vue";
+import { reactive, ref, watch, watchEffect } from "vue";
+import { useRoute } from "vue-router";
 import router from "@/router";
 
 const displayCard = ref(true);
-const offset = ref(1);
-const data = ref({ data: [] });
+const route = useRoute();
+
+const query = reactive({
+  rows: route.query.limit ? +route.query.limit : 20,
+  offset:
+    route.params.page && route.query.limit
+      ? (+route.params.page - 1) * +route.query.limit
+      : 0,
+  category: route?.query?.category,
+});
+
+const data = ref(<news>{});
 
 watchEffect(async () => {
-  const response = await fetch("/message?limit=20&offset=10");
+  const response = await fetch(
+    `/message?limit=${query.rows}&offset=${query.offset}${
+      query.category ? `&category=${query.category}` : ""
+    }`
+  );
   const parsedResponse = await response.json();
-  data.value = parsedResponse.news;
+  data.value = <news>parsedResponse.news;
   console.log(data.value);
 });
-console.log(data.value);
 
 const onPaginate = (e: any) => {
-  offset.value = e.rows * (e.page + 1);
-  router.replace({ path: `/${e.page + 1}` });
-  console.log(offset.value);
+  router.push({
+    path: `/page/${e.page + 1}`,
+    query: { limit: e.rows, category: query.category },
+  });
+  query.offset = e.rows * e.page;
 };
+
+console.log(route.query);
+
+interface news {
+  pagination: {
+    total: number;
+  };
+  data: [
+    {
+      author: string;
+      title: string;
+      image: string;
+      description: string;
+      category: string;
+      url: string;
+    }
+  ];
+}
 </script>
 
 <template>
@@ -56,11 +88,11 @@ const onPaginate = (e: any) => {
     </div>
 
     <Paginator
-      v-model:first="offset"
+      v-model:first="query.offset"
       @page="onPaginate"
-      :rows="15"
-      :totalRecords="120"
-      :rowsPerPageOptions="[15, 25, 35]"
+      v-model:rows="query.rows"
+      :totalRecords="data?.pagination?.total"
+      :rowsPerPageOptions="[15, 20, 25, 35]"
       class="paginator"
     ></Paginator>
   </div>
@@ -76,10 +108,8 @@ const onPaginate = (e: any) => {
   display: flex;
   flex-wrap: wrap;
   width: 100%;
-  /* grid-auto-flow: row; */
   align-items: center;
   justify-content: center;
-  /* flex-direction: column; */
   gap: 3rem;
 }
 

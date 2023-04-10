@@ -10,7 +10,7 @@ import "./assets/main.css";
 
 const app = createApp(App);
 
-worker.start();
+worker.start({ onUnhandledRequest: "bypass" });
 
 app.use(router);
 app.use(PrimeVue);

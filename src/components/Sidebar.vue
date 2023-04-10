@@ -1,19 +1,28 @@
 <script setup lang="ts">
+import router from "@/router";
+
 const names = [
   "General",
   "Business",
   "Entertainment",
-  "Health",
   "Science",
   "Sports",
   "Technology",
 ];
+
+const onSwitch = (name: string) => {
+  router.replace({
+    path: `/page/1`,
+    name: "home",
+    query: { category: name.toLowerCase() },
+  });
+};
 </script>
 
 <template>
   <nav>
     <ul class="list">
-      <li v-for="name in names">{{ name }}</li>
+      <li v-for="name in names" @click="onSwitch(name)">{{ name }}</li>
     </ul>
   </nav>
 </template>
