@@ -1,13 +1,26 @@
 <script setup lang="ts">
 import Paginator from "primevue/paginator";
-import Card from "./NewsEl/Wrappers/Card.vue";
-import NewsEl from "./NewsEl/NewsEl.vue";
-import { reactive, ref, watch, watchEffect } from "vue";
+import NewsCard from "./NewsEl/NewsCard.vue";
+import NewsList from "./NewsEl/NewsList.vue";
+import { reactive, ref, watchEffect } from "vue";
+import router from "../../router";
 import { useRoute } from "vue-router";
-import router from "@/router";
+import type { newsInterface as news } from "../../types/newsType";
 
-const displayCard = ref(true);
+const props = defineProps(["userSearch"]);
 const route = useRoute();
+// set the default mode of showing the data
+const displayCard = ref(true);
+
+interface Istatus {
+  loading: boolean;
+  error: null | string;
+}
+
+const status = reactive<Istatus>({
+  loading: false,
+  error: null,
+});
 
 const query = reactive({
   rows: route.query.limit ? +route.query.limit : 20,
@@ -16,19 +29,32 @@ const query = reactive({
       ? (+route.params.page - 1) * +route.query.limit
       : 0,
   category: route?.query?.category,
+  userSearch: props.userSearch,
 });
 
 const data = ref(<news>{});
 
 watchEffect(async () => {
-  const response = await fetch(
-    `/message?limit=${query.rows}&offset=${query.offset}${
-      query.category ? `&category=${query.category}` : ""
-    }`
-  );
-  const parsedResponse = await response.json();
-  data.value = <news>parsedResponse.news;
-  console.log(data.value);
+  try {
+    status.loading = true;
+    const response = await fetch(
+      `/message?limit=${query.rows}&offset=${query.offset}${
+        query.category ? `&category=${query.category}` : ""
+      }${props.userSearch ? `&query=${props.userSearch}` : ""}`
+    );
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error);
+    }
+    const parsedResponse = await response.json();
+    data.value = <news>parsedResponse.news;
+  } catch (e) {
+    if (e instanceof Error) {
+      status.error = e.message;
+    }
+  } finally {
+    status.loading = false;
+  }
 });
 
 const onPaginate = (e: any) => {
@@ -38,37 +64,24 @@ const onPaginate = (e: any) => {
   });
   query.offset = e.rows * e.page;
 };
-
-console.log(route.query);
-
-interface news {
-  pagination: {
-    total: number;
-  };
-  data: [
-    {
-      author: string;
-      title: string;
-      image: string;
-      description: string;
-      category: string;
-      url: string;
-    }
-  ];
-}
 </script>
 
 <template>
   <div class="container">
     <div class="header-container">
       <h1 class="header">News</h1>
-      <p>Display:</p>
-      <p @click="displayCard = true">Card</p>
-      <p @click="displayCard = false">List</p>
+      <div class="display-modes">
+        <p>Display:</p>
+        <p class="display-mode" @click="displayCard = true">Card</p>
+        <p class="display-mode" @click="displayCard = false">List</p>
+      </div>
     </div>
-    <div class="news">
+    <p v-if="status.error">
+      There was some error when fetching the data - {{ status.error }}
+    </p>
+    <div v-if="!status.loading && !status.error" class="news">
       <div v-for="(item, index) in data.data">
-        <Card
+        <NewsCard
           v-if="displayCard"
           :title="item.title"
           :desc="item.description"
@@ -76,7 +89,7 @@ interface news {
           :category="item.category"
           :url="item.url"
         />
-        <NewsEl
+        <NewsList
           v-else
           :title="item.title"
           :desc="item.description"
@@ -100,7 +113,6 @@ interface news {
 
 <style scoped>
 .container {
-  padding: 5rem;
   margin-left: 5rem;
 }
 
@@ -113,12 +125,15 @@ interface news {
   gap: 3rem;
 }
 
-/* :deep(.p-paginator-page) {
-  font-size: 5rem;
-} */
+.display-modes {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+}
 
-:deep(.p-paginator > * > *) {
-  font-size: 3rem;
+.display-mode {
+  cursor: pointer;
 }
 
 .paginator {
@@ -127,6 +142,7 @@ interface news {
 
 .header-container {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 2rem;

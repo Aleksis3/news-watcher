@@ -11,7 +11,7 @@ header {
   display: flex;
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 999999;
   font-weight: bold;
   text-transform: uppercase;
   background-color: var(--purple-1);

@@ -10,11 +10,6 @@ const router = createRouter({
       name: "home",
       component: HomeView,
     },
-    // {
-    //   path: "/a",
-    //   name: "xd",
-    //   component: Header,
-    // },
   ],
 });
 

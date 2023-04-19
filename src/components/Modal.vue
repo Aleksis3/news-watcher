@@ -7,9 +7,8 @@ const props = defineProps({
 <template>
   <div v-if="show" class="modal-mask">
     <div class="modal-container">
-      <!-- <button class="modal-default-button" @click="$emit('close')">OK</button> -->
       <div class="modal-body">
-        <slot name="body">default body</slot>
+        <slot name="body"></slot>
         <button class="close-btn" @click="$emit(`close`)">X</button>
       </div>
     </div>
@@ -20,7 +19,7 @@ const props = defineProps({
 .modal-mask {
   position: fixed;
   z-index: 9998;
-  top: 0;
+  top: 5rem;
   left: 0;
   width: 100%;
   height: 100%;
@@ -30,10 +29,9 @@ const props = defineProps({
 }
 
 .modal-container {
-  /* width: 130rem; */
   width: 80vw;
-  height: 95vh;
-  margin: auto;
+  height: 90vh;
+  margin: 3rem auto;
   background-color: #fff;
   border-radius: 2px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
@@ -51,30 +49,18 @@ const props = defineProps({
   width: 100%;
   height: 100%;
   position: relative;
-  background-color: red;
 }
 
 .close-btn {
   padding: 2rem 3rem;
   position: absolute;
+  transform: translateX(-100%);
+  cursor: pointer;
 }
 
 .next {
   right: 3rem;
 }
-
-/* .modal-default-button {
-  float: right;
-} */
-
-/*
- * The following styles are auto-applied to elements with
- * transition="modal" when their visibility is toggled
- * by Vue.js.
- *
- * You can easily play with the modal transition by editing
- * these styles.
- */
 
 .modal-enter-from {
   opacity: 0;

@@ -12,25 +12,23 @@ const showModal = ref(false);
 </script>
 
 <template>
-  <Fragment>
-    <Teleport to="body">
-      <modal :show="showModal" @close="showModal = false">
-        <template #body>
-          <iframe class="xd" :src="props.url"></iframe>
-        </template>
-      </modal>
-    </Teleport>
-    <div class="container">
-      <div class="info" @click="showModal = true">
-        <h2 class="header">{{ props.title }}</h2>
-        <p class="category">{{ props.category }}</p>
-        <p class="desc">{{ props.desc }}</p>
-      </div>
-      <div class="img-container">
-        <img v-if="props.image" :src="props.image" alt="news image" />
-      </div>
+  <Teleport to="body">
+    <modal :show="showModal" @close="showModal = false">
+      <template #body>
+        <iframe class="xd" :src="props.url"></iframe>
+      </template>
+    </modal>
+  </Teleport>
+  <div class="container">
+    <div class="info" @click="showModal = true">
+      <h2 class="header">{{ props.title }}</h2>
+      <p class="category">{{ props.category }}</p>
+      <p class="desc">{{ props.desc }}</p>
     </div>
-  </Fragment>
+    <div class="img-container">
+      <img v-if="props.image" :src="props.image" alt="news image" />
+    </div>
+  </div>
 </template>
 
 <style scoped>
@@ -38,7 +36,7 @@ const showModal = ref(false);
   display: flex;
   height: fit-content;
   padding: 3rem 0;
-  width: 90rem;
+  width: 100rem;
   max-width: 95vw;
   border-bottom: 1px black solid;
 }
@@ -98,8 +96,18 @@ img {
 }
 
 @media only screen and (max-width: 40rem) {
-  img {
-    display: none;
+  .container {
+    flex-direction: column;
+    width: auto;
+  }
+
+  .header {
+    width: 95%;
+  }
+
+  .img-container {
+    justify-content: center;
+    margin-left: 0;
   }
 }
 </style>

@@ -12,11 +12,10 @@ const showModal = ref(false);
 </script>
 
 <template>
-  <!-- <Fragment> -->
   <Teleport to="body">
     <modal :show="showModal" @close="showModal = false">
       <template #body>
-        <iframe class="xd" :src="props.url"></iframe>
+        <iframe class="embedded" :src="props.url"></iframe>
       </template>
     </modal>
   </Teleport>
@@ -24,13 +23,10 @@ const showModal = ref(false);
     <img v-if="props.image" :src="props.image" alt="news image" />
     <div class="info">
       <h2 class="header">{{ props.title }}</h2>
-
       <p class="category">{{ props.category }}</p>
       <p class="desc">{{ props.desc }}</p>
     </div>
-    <div class="die"></div>
   </div>
-  <!-- </Fragment> -->
 </template>
 
 <style scoped>
@@ -58,6 +54,11 @@ const showModal = ref(false);
   -webkit-box-orient: vertical;
   overflow: hidden;
   font-size: 2rem;
+}
+
+.embedded {
+  width: 100%;
+  height: 100%;
 }
 
 .info {
@@ -97,14 +98,9 @@ img {
   object-fit: cover;
 }
 
-.xd {
-  width: 100%;
-  height: 100%;
-}
-
-@media only screen and (max-width: 40rem) {
-  img {
-    display: none;
+@media only screen and (max-width: 70rem) {
+  .container {
+    width: 25rem;
   }
 }
 </style>

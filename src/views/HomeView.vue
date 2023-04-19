@@ -2,24 +2,28 @@
 import NewsContainer from "@/components/NewsContainer/NewsContainer.vue";
 import Categories from "@/components/Sidebar.vue";
 import Search from "@/components/Search.vue";
+import { ref } from "vue";
+
+const userSearch = ref();
 </script>
 
 <template>
-  <div class="grid-container">
+  <div class="flex-container">
     <Categories />
-    <main class="a">
-      <Search />
-      <NewsContainer />
+    <main>
+      <Search @changeUserSearch="(value:string) => (userSearch = value)" />
+      <NewsContainer :userSearch="userSearch" />
     </main>
   </div>
 </template>
 
 <style scoped>
-.grid-container {
+.flex-container {
   display: flex;
   flex: 1;
   width: 100%;
 }
+
 main {
   width: 130rem;
   display: flex;
